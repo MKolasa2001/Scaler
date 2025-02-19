@@ -6,57 +6,59 @@ import sounds
 def dwar_fretboard(event=None):
     canvas.delete("all")  # Wyczyść poprzednie linie
 
-    szerokosc = canvas.winfo_width()
+    window_width = canvas.winfo_width()
     window_height = canvas.winfo_height()
+    
+    # Oblicz odstępy
+    vertical_space = (window_width - con.LEFT_SPACE - con.RIGHT_SPACE) / (con.FRETS_NUMBER - 1)
+    horizontal_space = vertical_space / con.RATIO
 
-    pos = sounds.isolate_notes("STANDARD", "PENTATONIC", "C", sounds_position())
+    canvas.create_text(10, 10, text="Scaler", anchor="nw", font=("Arial", 16, "bold"), fill="blue")
+
+    pos = sounds.isolate_notes("STANDARD", "PENTATONIC", tonation_button.get(), sounds_position())
     for note, x, y in pos:
             r = 5
             canvas.create_oval(x-r, y-r, x+r, y+r, fill="lightblue", outline="black", width=0)
 
 
-    canvas.create_text(10, 10, text="Siatka linii", anchor="nw", font=("Arial", 16, "bold"), fill="blue")
-
-    # Oblicz odstępy
-    odstęp_pionowy = (szerokosc - con.LEFT_SPACE - con.RIGHT_SPACE) / (con.FRETS_NUMBER - 1)
-    odstęp_poziomy = odstęp_pionowy / con.RATIO
     
+
 
     # Rysuj poziome linie
     for i in range(con.STRINGS_NUMBER):
-        y = window_height - con.DOWN_SPACE - i * odstęp_poziomy 
-        canvas.create_line(con.LEFT_SPACE, y, szerokosc - con.RIGHT_SPACE, y, width=2, fill="black")
+        y = window_height - con.DOWN_SPACE - i * horizontal_space 
+        canvas.create_line(con.LEFT_SPACE, y, window_width - con.RIGHT_SPACE, y, width=2, fill="black")
 
     # Rysuj pionowe linie (ograniczone do obszaru poziomych linii)
     for j in range(con.FRETS_NUMBER):
-        x = j * odstęp_pionowy + con.LEFT_SPACE
+        x = j * vertical_space + con.LEFT_SPACE
         grubość = 4 if j == 0 else 1  # Pierwsza pionowa linia grubsza
 
-        fret_start = window_height - con.DOWN_SPACE - (con.STRINGS_NUMBER - 1) * odstęp_poziomy
+        fret_start = window_height - con.DOWN_SPACE - (con.STRINGS_NUMBER - 1) * horizontal_space
         canvas.create_line(x, fret_start, x, window_height - con.DOWN_SPACE , width=grubość, fill="black")
         if j != 0:
-            canvas.create_text(x - odstęp_pionowy / 2, window_height - con.DOWN_SPACE , text=f"{j}", anchor="n", font=("Arial", 10), fill="black")
+            canvas.create_text(x - vertical_space / 2, window_height - con.DOWN_SPACE , text=f"{j}", anchor="n", font=("Arial", 10), fill="black")
 
 def sounds_position():
-    szerokosc = canvas.winfo_width()
+    window_width = canvas.winfo_width()
     window_height = canvas.winfo_height()
 
-    odstęp_pionowy = (szerokosc - con.LEFT_SPACE - con.RIGHT_SPACE) / (con.FRETS_NUMBER - 1)
-    odstęp_poziomy = odstęp_pionowy / con.RATIO
+    vertical_space = (window_width - con.LEFT_SPACE - con.RIGHT_SPACE) / (con.FRETS_NUMBER - 1)
+    horizontal_space = vertical_space / con.RATIO
 
     positions = {}
 
     for i in range(con.STRINGS_NUMBER):
-        positions[window_height - con.DOWN_SPACE - i * odstęp_poziomy] = [] 
+        positions[window_height - con.DOWN_SPACE - i * horizontal_space] = [] 
 
     # Rysuj pionowe linie (ograniczone do obszaru poziomych linii)
     for j in range(con.FRETS_NUMBER):
-        x = j * odstęp_pionowy + con.LEFT_SPACE
+        x = j * vertical_space + con.LEFT_SPACE
         for pos in positions.values():
-            pos.append(int(x - odstęp_pionowy / 2))
+            pos.append(int(x - vertical_space / 2))
     return positions
 
-def zmien_kolor(event):
+def tonation_change(event):
     dwar_fretboard()
 
 # --- Tworzenie głównego okna ---
@@ -64,12 +66,12 @@ okno = tk.Tk()
 okno.title("Siatka linii reagująca na rozmiar okna")
 okno.geometry("800x400")
 
-# --- Rozwijana lista (kolory) ---
-kolory = ["black", "red", "blue", "green", "orange", "purple"]
-wybor_koloru = ttk.Combobox(okno, values=kolory, state="readonly")
-wybor_koloru.set("black")  # Domyślny kolor
-wybor_koloru.pack(pady=10)
-wybor_koloru.bind("<<ComboboxSelected>>", zmien_kolor)
+# --- combobox z tonacjami ---
+
+tonation_button = ttk.Combobox(okno, values=con.NOTES, state="readonly")
+tonation_button.set("C")  
+tonation_button.pack(pady=10)
+tonation_button.bind("<<ComboboxSelected>>", tonation_change)
 
 
 # --- Tworzenie canvasu ---
