@@ -16,7 +16,7 @@ def draw_fretboard(event=None):
     canvas.create_text(10, 10, text="Scaler", anchor="nw", font=("Arial", 16, "bold"), fill="blue")
 
     # Rysuj wybrane dźwięki 
-    pos = sounds.isolate_notes("STANDARD", "PENTATONIC", tonation_button.get(), sounds_position())
+    pos = sounds.isolate_notes(tuning_button.get(), scale_button.get(), tonation_button.get(), sounds_position())
     for note, x, y in pos:
             r = horizontal_space / 2
             canvas.create_oval(x-r, y-r, x+r, y+r, fill="lightblue", outline="black", width=0)
@@ -70,17 +70,24 @@ window.geometry("1000x400")
 frame = tk.Frame(window)
 frame.pack(side="top", anchor="nw", padx=10, pady=10)
 
+# --- combobox ze strojeniami ---
+
+tuning_button = ttk.Combobox(frame, values=list(con.TUNINGS.keys()), state="readonly")
+tuning_button.set("STANDARD")  
+tuning_button.pack(pady=5, padx=10, side="left")
+tuning_button.bind("<<ComboboxSelected>>", draw_fretboard)
+
 # --- combobox ze skalami ---
 
 scale_button = ttk.Combobox(frame, values=list(con.SCALES.keys()), state="readonly")
 scale_button.set("PENTATONIC")  
 scale_button.pack(pady=5, padx=10, side="left")
-scale_button.bind("<<ComboboxSelected>>", tonation_change)
+scale_button.bind("<<ComboboxSelected>>", draw_fretboard)
 
 
 # --- combobox z tonacjami ---
 
-tonation_button = ttk.Combobox(frame, values=con.NOTES, state="readonly")
+tonation_button = ttk.Combobox(frame, values=sorted(con.NOTES), state="readonly")
 tonation_button.set("C")  
 tonation_button.pack(pady=5, padx=10, side="left")
 tonation_button.bind("<<ComboboxSelected>>", draw_fretboard)
