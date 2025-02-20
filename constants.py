@@ -3,9 +3,9 @@ STRINGS_NUMBER = 6
 FRETS_NUMBER = 21
 RATIO = 2.0       # Height to width ratio in fret
 
-LEFT_SPACE = 25
+LEFT_SPACE = 50
 RIGHT_SPACE = 25
-DOWN_SPACE = 25
+DOWN_SPACE = 30
 
 
 NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
