@@ -7,7 +7,6 @@ LEFT_SPACE = 50
 RIGHT_SPACE = 25
 DOWN_SPACE = 30
 
-
 NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
 TONATIONS = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",
@@ -17,7 +16,6 @@ TUNINGS = {
     "STANDARD": ["E", "B", "G", "D", "A", "E"],
     "DROP D": ["E", "B", "G", "D", "A", "D"]
 }
-
 
 SCALES = {
 "PENTATONIC":   [[0, 2, 4, 5, 7, 9, 11], [0, 2, 3, 5, 7, 8, 10]],
