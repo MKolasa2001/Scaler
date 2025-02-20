@@ -87,7 +87,7 @@ scale_button.bind("<<ComboboxSelected>>", draw_fretboard)
 
 # --- combobox z tonacjami ---
 
-tonation_button = ttk.Combobox(frame, values=sorted(con.NOTES), state="readonly")
+tonation_button = ttk.Combobox(frame, values=sorted(con.TONATIONS), state="readonly")
 tonation_button.set("C")  
 tonation_button.pack(pady=5, padx=10, side="left")
 tonation_button.bind("<<ComboboxSelected>>", draw_fretboard)

@@ -4,8 +4,13 @@ def shift_note(note, interval):
     return con.NOTES[(con.NOTES.index(note) + interval) % 12]
 
 def generate_notes(scale, tonation):
+    is_minor = 0
+    if tonation.endswith("m"):
+        is_minor = 1
+        tonation = tonation[:-1]
+
     tonation_shift = con.NOTES.index(tonation)
-    intervals = [(x + tonation_shift) % 12 for x in con.SCALES[scale]]
+    intervals = [(x + tonation_shift) % 12 for x in con.SCALES[scale][is_minor]]
     return [con.NOTES[i] for i in intervals]
     
 
